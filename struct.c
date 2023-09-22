@@ -2,16 +2,19 @@
 #include <string.h>
 
 typedef struct{
-  int id ;
+  int id;
   char title [100];
   char description [100];
+  char deadline[100];
   char status[100];
-  int deadline[100];
+  char remaningDays;
+  int daysCalculation;
 } toDOList;
 toDOList tab[100];
-int id_G=0;
+int tempSortAlphabetNum,day,month,year,tempDaysCalculation,tempDaysCalculation1,tempSortBydeadline,modidyListCount;
+char tempSortAlphabet[100],newDescription[100];
 int numOfTask,countAdd,countAddElement=0,StatusAdd;
-int choisie,showListchoice,modidyId,modidyChoisie;
+int idCount,choisie,showListchoice,modidyId,modidyChoisie,showListCount,showListCount1,deleteId,countDelete,countDelete1,searchID,countSearch,searchListChoice,searchTitle;
   
 
 void addinfo();
@@ -37,24 +40,57 @@ int main()
     switch(choisie)
     {
       case 1:
-        id_G++;
-            tab[countAddElement].id = id_G;
+            tab[countAddElement].id++;
             printf("Enter the title: ");
-            scanf("%s", tab[countAddElement].title);
+            scanf(" %[^\n]", tab[countAddElement].title);
             printf("Enter the description: ");
-            scanf("%s", tab[countAddElement].description);
+            scanf(" %[^\n]", tab[countAddElement].description);
             printf("Enter un choix pour status:\n1-A realiser\n2-En cours de realisation\n3-Finalisee: ");
             scanf("%d", &StatusAdd);
-
             if (StatusAdd == 1) {
                 strcpy(tab[countAddElement].status, "A realiser");
             } else if (StatusAdd == 2) {
-                 strcpy(tab[countAddElement].status, "En cours de realisation");
+                strcpy(tab[countAddElement].status, "En cours de realisation");
             } else if (StatusAdd == 3) {
                 strcpy(tab[countAddElement].status, "Finalisee");
             } else {
                 printf("Entrez un nouveau nombre valide.\n");
                     }
+            while (1)
+            {
+              printf("Entre le jour de deadline:");
+              scanf("%d",&day);
+              if ( day<1 && day>31)
+              {
+                printf("Le jour invalide entre un jour de 1 au 31.");
+              }
+              else break;
+            }
+            while (1)
+            {
+              printf("Entre le mois de deadline:");
+              scanf("%d",&month);
+              if ( month<1 && month>12)
+              {
+                printf("Le mois invalide entre un mois de 1 au 12.");
+              }
+              else break;
+            
+            }
+            while (1)
+            {
+            printf("Entre le annee de deadline:");
+            scanf("%d",&year);
+            if ( year<1999 && year>2051)
+              {
+                printf("Le annnee invalide entre un annee de 2000 au 2050.");
+              }
+              else break;
+            
+            }
+            tab[countAddElement].daysCalculation=(year*360)+(month*30)+day;
+            //sprintf(tab[countAddElement].remaningDays,"%d day",daysCalculation);
+            sprintf(tab[countAddElement].deadline,"%d/%d/%d",day,month,year);
             countAddElement++;
         break;
       case 2:
@@ -62,55 +98,274 @@ int main()
                 scanf("%d", &numOfTask);
 
           for (countAdd = 0; countAdd < numOfTask; countAdd++) {
-            id_G++;
-            tab[countAddElement].id = id_G;
+            tab[countAddElement].id++;
+            //id_G++;
+            //sprintf(tab[countAddElement].id,"%d",id_G);
             printf("Enter the title: ");
-            scanf("%s", tab[countAddElement].title);
+            scanf(" %[^\n]", tab[countAddElement].title);
             printf("Enter the description: ");
-            scanf("%s", tab[countAddElement].description);
+            scanf(" %[^\n]", tab[countAddElement].description);
             printf("Enter un choix pour status:\n1-A realiser\n2-En cours de realisation\n3-Finalisee: ");
-            scanf("%d", &StatusAdd);
-
+            scanf( " %d", &StatusAdd);
             if (StatusAdd == 1) {
                 strcpy(tab[countAddElement].status, "A realiser");
             } else if (StatusAdd == 2) {
-                 strcpy(tab[countAddElement].status, "En cours de realisation");
+                strcpy(tab[countAddElement].status, "En cours de realisation");
             } else if (StatusAdd == 3) {
                 strcpy(tab[countAddElement].status, "Finalisee");
             } else {
                 printf("Entrez un nouveau nombre valide.\n");
                     }
-                countAddElement++;
+            while (1)
+            {
+              printf("Entre le jour de deadline:");
+              scanf("%d",&day);
+              if ( day<1 && day>31)
+              {
+                printf("Le jour invalide entre un jour de 1 au 31.");
+              }
+              else break;
+            }
+            while (1)
+            {
+              printf("Entre le mois de deadline:");
+              scanf("%d",&month);
+              if ( month<1 && month>12)
+              {
+                printf("Le mois invalide entre un mois de 1 au 12.");
+              }
+              else break;
+            }
+            while (1)
+            {
+            printf("Entre le annee de deadline:");
+            scanf("%d",&year);
+            if ( year<1999 && year>2051)
+              {
+                printf("Le annnee invalide entre un annee de 2000 au 2050.");
+              }
+              else break;
+            }
+            tab[countAddElement].daysCalculation=(year*360)+(month*30)+day;
+            //sprintf(tab[countAddElement].remaningDays,"%d day",daysCalculation);
+            sprintf(tab[countAddElement].deadline,"%d/%d/%d",day,month,year);
+            countAddElement++;
           }
         break;
       case 3:
         printf("Choisie de ce list que vous voulez:\n1-Trier les tâches par ordre alphabétique\n2-Trier les tâches par deadline.\n3-Afficher les tâches dont le deadline est dans 3 jours ou moins.");
-        scanf("%d",showListchoice);
+        scanf("%d",&showListchoice);
         if(showListchoice==1)
         {
-            
+          //this code will capitlise first letter
+          for (showListCount=0;showListCount<countAddElement;showListCount++)
+          {
+            if (tab[showListCount].title[0] != '\0') 
+            {
+              if (tab[showListCount].title[0] >= 'a' && tab[showListCount].title[0] <= 'z') 
+                {
+                  tab[showListCount].title[0] = tab[showListCount].title[0] - 'a' + 'A';
+                }
+            }
+          }
+          //sort by 
+          for (showListCount = 0; showListCount < countAddElement; showListCount++)
+          {
+            for (showListCount1=showListCount+1;showListCount1<countAddElement;showListCount1++)
+            {
+              if(strcmp(tab[showListCount].title,tab[showListCount1].title)<1)
+              {
+                //swap id
+                tempSortAlphabetNum=tab[showListCount].id;
+                tab[showListCount].id=tab[showListCount1].id;
+                tab[showListCount1].id=tempSortAlphabetNum;
+                //swap title
+                strcpy(tempSortAlphabet,tab[showListCount].title);
+                strcpy(tab[showListCount].title,tab[showListCount1].title);
+                strcpy(tab[showListCount1].title,tempSortAlphabet);
+                //swap description
+                strcpy(tempSortAlphabet,tab[showListCount].description);
+                strcpy(tab[showListCount].description,tab[showListCount1].description);
+                strcpy(tab[showListCount1].description,tempSortAlphabet);
+                //swap status
+                strcpy(tempSortAlphabet,tab[showListCount].status);
+                strcpy(tab[showListCount].status,tab[showListCount1].status);
+                strcpy(tab[showListCount1].status,tempSortAlphabet);
+                //swap deadline
+                strcpy(tempSortAlphabet,tab[showListCount].deadline);
+                strcpy(tab[showListCount].deadline,tab[showListCount1].deadline);
+                strcpy(tab[showListCount1].deadline,tempSortAlphabet);
+              }
+            }
+          }
         }
         else if(showListchoice==2)
         {
-            
+          for (showListCount = 0; showListCount < countAddElement; showListCount++)
+          {
+            for (showListCount1=showListCount+1;showListCount1<countAddElement;showListCount1++)
+            {
+              if (tab[showListCount].daysCalculation<tab[showListCount+1].daysCalculation)
+              {
+                //swap id
+
+                tempSortAlphabetNum=tab[showListCount].id;
+                tab[showListCount].id=tab[showListCount1].id;
+                tab[showListCount1].id=tempSortAlphabetNum;
+                //swap title
+                strcpy(tempSortAlphabet,tab[showListCount].title);
+                strcpy(tab[showListCount].title,tab[showListCount1].title);
+                strcpy(tab[showListCount1].title,tempSortAlphabet);
+                //swap description
+                strcpy(tempSortAlphabet,tab[showListCount].description);
+                strcpy(tab[showListCount].description,tab[showListCount1].description);
+                strcpy(tab[showListCount1].description,tempSortAlphabet);
+                //swap status
+                strcpy(tempSortAlphabet,tab[showListCount].status);
+                strcpy(tab[showListCount].status,tab[showListCount1].status);
+                strcpy(tab[showListCount1].status,tempSortAlphabet);
+                //swap deadline
+                strcpy(tempSortAlphabet,tab[showListCount].deadline);
+                strcpy(tab[showListCount].deadline,tab[showListCount1].deadline);
+                strcpy(tab[showListCount1].deadline,tempSortAlphabet);
+              }
+            }
+          }
         }
         else if(showListchoice==3)
         {
             
         }
         else printf("this number is not on the list");
+        for ( showListCount= 0; showListCount < countAddElement; showListCount++)
+        {
+          printf("Id est:%d\n",tab[showListCount].id);
+          printf("Le titre de tache est %s\n",tab[showListCount].title);
+          printf("Le description de tache est %s\n",tab[showListCount].description);
+          printf("Le deadline de tache est %s\n",tab[showListCount].deadline);
+          printf("Le titre de tache est %s\n",tab[showListCount].status);
+        }
         break;
       case 4:
         printf("entre le id de tach:");
         scanf("%d",&modidyId);
-        printf("Choisie de ce list que vous voulez:\n1-Modifier la description d'une tâche\n2-Modifier le statut d’une tâche.\n3-Modifier le deadline d’une tâche.");
+        printf("Choisie de ce list que vous voulez:\n1-Modifier la description de une tâche\n2-Modifier le statut de une tâche.\n3-Modifier le deadline de une tâche.");
         scanf("%d",&modidyChoisie);
-        
+        if(modidyChoisie==1)
+        {
+          printf("Entre la nouvelle description:");
+          scanf("%s",&newDescription);
+          for (modidyListCount=0;modidyListCount<countAddElement;modidyListCount++)
+          {
+            if (modidyId==tab[modidyListCount].id)
+            {
+              strcpy(tab[modidyListCount].description,newDescription);
+            }
+          }
+        }
+        else if(modidyChoisie==2)
+        {
+          for (modidyListCount=0;modidyListCount<countAddElement;modidyListCount++)
+          {
+            if (modidyId==tab[modidyListCount].id)
+            {
+              printf("Entre la nouveau status:");
+              printf("Enter un choix pour status:\n1-A realiser\n2-En cours de realisation\n3-Finalisee: ");
+              scanf("%d", &StatusAdd);
+              if (StatusAdd == 1) {
+                  strcpy(tab[modidyListCount].status, "A realiser");
+              } else if (StatusAdd == 2) {
+                  strcpy(tab[modidyListCount].status, "En cours de realisation");
+              } else if (StatusAdd == 3) {
+                  strcpy(tab[modidyListCount].status, "Finalisee");
+              } else {
+                  printf("Entrez un nouveau nombre valide.\n");
+              }
+            }
+          }
+        }
+        else if(modidyChoisie==3)
+        {
+          for (modidyListCount=0;modidyListCount<countAddElement;modidyListCount++)
+          {
+            if (modidyId==tab[modidyListCount].id)
+            {
+                while (1)
+                {
+                  printf("Entre le jour de deadline:");
+                  scanf("%d",&day);
+                  if ( day>0 && day<31)
+                  {
+                    printf("Le jour invalide entre un jour de 1 au 31.");
+                  }
+                  else break;
+                }
+                while (1)
+                {
+                  printf("Entre le mois de deadline:");
+                  scanf("%d",&month);
+                  if ( month<1 && month>12)
+                  {
+                    printf("Le mois invalide entre un mois de 1 au 12.");
+                  }
+                  else break;
+                }
+                while (1)
+                {
+                printf("Entre le annee de deadline:");
+                scanf("%d",&year);
+                if ( year<1999 && year>2051)
+                  {
+                    printf("Le annnee invalide entre un annee de 2000 au 2050.");
+                  }
+                  else break;
+                }
+            }
+          }
+        }
+        else printf("this number is not on the list");
         break;
       case 5:
-        
+        printf("entre le id de tach:");
+        scanf("%d",&deleteId);
+        for (countDelete = 0; countDelete < countAddElement; countDelete++)
+        {
+          if (tab[countDelete].id==deleteId)
+          {
+            for ( countDelete1= countDelete; countDelete1 < countAddElement; countDelete1++)
+            {
+              tab[countDelete1]=tab[countDelete1+1];
+            }
+          }
+        }
         break;
       case 6:
+      printf("Choisie de ce list que vous voulez:\n1-Rechercher une tâche par son Identifiant.\n2-Rechercher une tâche par son Titre.");
+      scanf("%d",searchListChoice);
+      if (searchListChoice==1)
+      {
+        printf("Entre le id de tach:");
+        scanf("%d",&searchID);
+        for ( countSearch=0 ; countSearch < countAddElement; countSearch++)
+        {
+          if (tab[countSearch].id==searchID)
+          {
+            
+          }
+        }
+      }
+      if (searchListChoice==2)
+      {
+        printf("Entre le titre de tach:");
+        scanf("%d",&searchTitle);
+        for ( countSearch=0 ; countSearch < countAddElement; countSearch++)
+        {
+          if (strcmp(tab[countSearch].title,searchID)==0)
+          {
+
+          }
+        }
+      }
         break;
       case 7:
         break;
